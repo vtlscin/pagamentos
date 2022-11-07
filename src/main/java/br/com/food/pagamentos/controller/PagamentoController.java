@@ -1,7 +1,9 @@
 package br.com.food.pagamentos.controller;
 
 import br.com.food.pagamentos.dto.PagamentoDto;
+import br.com.food.pagamentos.model.Status;
 import br.com.food.pagamentos.service.PagamentoService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,7 +64,12 @@ public class PagamentoController {
     }
 
     @PatchMapping("/{id}/confirmar")
+    @CircuitBreaker(name = "atualizaPedido", fallbackMethod = "atualizaStatusPagamentoIntermediario")
     public void confirmarPagamento(@PathVariable @NotNull Long id){
         service.confirmaPagamento(id);
+    }
+
+    public void atualizaStatusPagamentoIntermediario(Long id, Exception e){
+        service.atualizaStatusPagamento(id, Status.CONFIRMADO_SEM_INTEGRACAO);
     }
 }
