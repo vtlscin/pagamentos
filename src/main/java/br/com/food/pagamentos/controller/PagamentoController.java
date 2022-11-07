@@ -2,6 +2,7 @@ package br.com.food.pagamentos.controller;
 
 import br.com.food.pagamentos.dto.PagamentoDto;
 import br.com.food.pagamentos.service.PagamentoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -53,5 +54,10 @@ public class PagamentoController {
     public ResponseEntity<PagamentoDto> deletar(@PathVariable @NotNull Long id){
         service.excluirPagamento(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/porta")
+    public String obtemNumeroPorta(@Value("${local.server.port}") String porta){
+        return String.format("Instancia responsavel por responder a requisicao foi %s",porta);
     }
 }
