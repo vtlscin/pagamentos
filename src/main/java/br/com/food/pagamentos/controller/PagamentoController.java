@@ -60,4 +60,9 @@ public class PagamentoController {
     public String obtemNumeroPorta(@Value("${local.server.port}") String porta){
         return String.format("Instancia responsavel por responder a requisicao foi %s",porta);
     }
+
+    @PatchMapping("/{id}/confirmar")
+    public void confirmarPagamento(@PathVariable @NotNull Long id){
+        service.confirmaPagamento(id);
+    }
 }
